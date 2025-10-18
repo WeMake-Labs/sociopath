@@ -263,7 +263,7 @@ public enum AIProvider: String, CaseIterable, Identifiable {
     }
     
     var isRecommended: Bool {
-        return false
+        return self == .gemini
     }
 }
 
@@ -304,7 +304,7 @@ public enum OpenRouterModel: String, CaseIterable, Identifiable {
     case glm45air = "z-ai/glm-4.5-air:free"
     case llama4scout = "meta-llama/llama-4-scout:free"
     case llama4maverick = "meta-llama/llama-4-maverick:free"
-    case grok4fast = "openai/grok-4-fast"
+    case grok4fast = "x-ai/grok-4-fast"
     case gpt4o = "openai/gpt-4o"
     case claudesonnet45 = "anthropic/claude-sonnet-4.5"
     case llama370b = "meta-llama/llama-3-70b-instruct"
