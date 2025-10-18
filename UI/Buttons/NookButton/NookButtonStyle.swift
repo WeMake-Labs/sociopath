@@ -128,7 +128,7 @@ struct NookButtonStyle: ButtonStyle {
             of: background,
             targetRatio: 1.5,
             direction: .forceDark
-        )) ?? textColor
+        )) ?? Color.black.opacity(0.3)
     }
 
     /// Returns the highlight color for the given background
@@ -137,7 +137,7 @@ struct NookButtonStyle: ButtonStyle {
             of: background,
             targetRatio: 2,
             direction: .preferLight
-        )) ?? textColor
+        )) ?? Color.white
     }
 
     /// Returns the highlight opacity based on button state
@@ -267,7 +267,6 @@ private struct ButtonPreviewSection: View {
                 print("Create")
             }
             .buttonStyle(.nookButtonProminent)
-            .background(.red)
 
             Button("Cancel") {
                 print("Cancel")
