@@ -15,11 +15,10 @@ struct SpaceEditDialog: DialogPresentable {
     }
 
     private let mode: Mode
-    private let originalSpaceName: String
-    private let originalSpaceIcon: String
-
+    private let space: Space
     @State private var spaceName: String
     @State private var spaceIcon: String
+    @State private var isInitialized = false
 
     private let onSaveChanges: (String, String) -> Void
     private let onCancelChanges: () -> Void
@@ -30,13 +29,11 @@ struct SpaceEditDialog: DialogPresentable {
         onSave: @escaping (String, String) -> Void,
         onCancel: @escaping () -> Void
     ) {
-        let name = MainActor.assumeIsolated { space.name }
-        let icon = MainActor.assumeIsolated { space.icon }
         self.mode = mode
-        self.originalSpaceName = name
-        self.originalSpaceIcon = icon
-        _spaceName = State(initialValue: name)
-        _spaceIcon = State(initialValue: icon)
+        self.space = space
+        // Initialize with empty strings, will be populated in onAppear
+        _spaceName = State(initialValue: "")
+        _spaceIcon = State(initialValue: "")
         self.onSaveChanges = onSave
         self.onCancelChanges = onCancel
     }
@@ -57,7 +54,7 @@ struct SpaceEditDialog: DialogPresentable {
         return DialogHeader(
             icon: iconName,
             title: title,
-            subtitle: originalSpaceName
+            subtitle: space.name
         )
     }
 
@@ -66,15 +63,16 @@ struct SpaceEditDialog: DialogPresentable {
         SpaceEditContent(
             spaceName: $spaceName,
             spaceIcon: $spaceIcon,
-            originalIcon: originalSpaceIcon,
+            isInitialized: $isInitialized,
+            space: space,
             mode: mode
         )
     }
 
     func dialogFooter() -> DialogFooter {
         let trimmed = spaceName.trimmingCharacters(in: .whitespacesAndNewlines)
-        let effectiveName = trimmed.isEmpty ? originalSpaceName : trimmed
-        let iconValue = spaceIcon.isEmpty ? originalSpaceIcon : spaceIcon
+        let effectiveName = trimmed.isEmpty ? space.name : trimmed
+        let iconValue = spaceIcon.isEmpty ? space.icon : spaceIcon
 
         return DialogFooter(
             rightButtons: [
@@ -99,8 +97,9 @@ struct SpaceEditDialog: DialogPresentable {
 private struct SpaceEditContent: View {
     @Binding var spaceName: String
     @Binding var spaceIcon: String
+    @Binding var isInitialized: Bool
 
-    let originalIcon: String
+    let space: Space
     let mode: SpaceEditDialog.Mode
 
     @StateObject private var emojiManager = EmojiPickerManager()
@@ -150,10 +149,12 @@ private struct SpaceEditContent: View {
         }
         .padding(.horizontal, 4)
         .onAppear {
-            if !spaceIcon.isEmpty {
-                emojiManager.selectedEmoji = spaceIcon
-            } else {
-                emojiManager.selectedEmoji = originalIcon
+            // Initialize state variables from the MainActor-isolated Space properties
+            if !isInitialized {
+                spaceName = space.name
+                spaceIcon = space.icon
+                emojiManager.selectedEmoji = space.icon
+                isInitialized = true
             }
         }
         .onChange(of: emojiManager.selectedEmoji) { _, newValue in
@@ -167,7 +168,7 @@ private struct SpaceEditContent: View {
         if !spaceIcon.isEmpty {
             return spaceIcon
         }
-        return originalIcon
+        return space.icon
     }
 }
 
