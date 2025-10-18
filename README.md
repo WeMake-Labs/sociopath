@@ -62,6 +62,73 @@ Some obj-c libraries may not play nice with Intel Macs, though there should tech
 
 You’ll need to set your personal Development Team in Signing to build locally.
 
+Join our Discord to help with development: https://discord.gg/J3XfPvg7Fs
+
+## Project Structure
+
+```
+sociopath/
+├── Nook/
+│   ├── Managers/              # Core business logic and state management
+│   │   ├── BrowserManager/    # Central coordinator for browser state
+│   │   ├── TabManager/        # Tab lifecycle and organization
+│   │   ├── ProfileManager/    # User profile and data isolation
+│   │   ├── ExtensionManager/  # Browser extension support
+│   │   ├── HistoryManager/    # Browsing history tracking
+│   │   ├── DownloadManager/   # File download handling
+│   │   ├── CookieManager/     # Cookie storage and management
+│   │   ├── CacheManager/      # Web cache management
+│   │   ├── SettingsManager/   # User preferences
+│   │   ├── DialogManager/     # System dialogs and alerts
+│   │   ├── SearchManager/     # Search functionality
+│   │   ├── SplitViewManager/  # Split-screen tab viewing
+│   │   ├── PeekManager/       # Quick preview feature
+│   │   ├── DragManager/       # Drag-and-drop operations
+│   │   └── ...
+│   │
+│   ├── Models/                # Data models and business entities
+│   │   ├── Tab/              # Tab model and state
+│   │   ├── Space/            # Workspace organization
+│   │   ├── Profile/          # User profile data model
+│   │   ├── History/          # Browsing history entries
+│   │   ├── Extension/        # Extension metadata
+│   │   ├── Settings/         # Settings data structures
+│   │   └── BrowserConfig/    # Browser configuration
+│   │
+│   ├── Components/            # SwiftUI views and UI components
+│   │   ├── Browser/          # Main browser window UI
+│   │   ├── Sidebar/          # Sidebar navigation UI
+│   │   ├── CommandPalette/   # Quick action interface
+│   │   ├── Settings/         # Settings screens
+│   │   ├── Extensions/       # Extension management UI
+│   │   ├── Peek/             # Preview overlay UI
+│   │   ├── Dialog/           # Modal dialogs
+│   │   ├── FindBar/          # In-page search
+│   │   └── ...
+│   │
+│   ├── Utils/                # Utility functions and helpers
+│   │   ├── WebKit/           # WebKit extensions
+│   │   ├── Shaders/          # Metal shaders for UI effects
+│   │   └── Debug/            # Development tools
+│   │
+│   ├── Protocols/            # Swift protocols and interfaces
+│   ├── Adapters/             # External API adapters
+│   ├── ThirdParty/           # Third-party dependencies
+│   └── Supporting Files/     # App configuration and resources
+│
+├── Config/                   # Build and project configuration
+└── assets/                   # Static assets and resources
+```
+
+### Architecture Overview
+
+Nook follows a manager-based architecture where:
+
+- **Managers** handle business logic and coordinate between different parts of the app
+- **Models** represent data and state using Swift's `@Observable` macro
+- **Components** are SwiftUI views that reactively update based on model changes
+- **BrowserManager** acts as the central coordinator, connecting all managers together
+
 ### LICENSES
 
 With the exception of third-party libraries in Sociopath/ThirdParty, all code is under the GPL 3.0 License. The relevant third-party code is licensed per-folder under a variety of free, open-source software licenses.
