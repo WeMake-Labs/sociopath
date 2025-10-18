@@ -43,7 +43,6 @@ struct SpaceTitle: View {
                         .font(.system(size: iconSize))
                         .background(EmojiPickerAnchor(manager: emojiManager))
                         .onChange(of: emojiManager.selectedEmoji) { _, newValue in
-                            print(newValue)
                             space.icon = newValue
                             browserManager.tabManager.persistSnapshot()
                          }
@@ -191,8 +190,7 @@ struct SpaceTitle: View {
         // Provide a right-click context menu mirroring the hover menu
         .contextMenu {
             Button {
-                emojiFieldFocused = true
-                NSApp.orderFrontCharacterPalette(nil)
+                emojiManager.toggle()
             } label: {
                 Label("Change Space Icon", systemImage: "face.smiling")
             }
