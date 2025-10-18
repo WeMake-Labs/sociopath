@@ -24,7 +24,7 @@ struct NavButtonStyle: ButtonStyle {
                 .foregroundStyle(.primary)
                 .font(.system(size: iconSize))
         }
-        .opacity(isEnabled ? 1.0 : 0.3)
+        .opacity(isEnabled ? 1.0 : 0.5)
         .contentTransition(.symbolEffect(.replace.upUp.byLayer, options: .nonRepeating))
         .scaleEffect(configuration.isPressed && isEnabled ? 0.95 : 1.0)
         .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
@@ -61,11 +61,12 @@ struct NavButtonStyle: ButtonStyle {
     }
     
     private func backgroundColorOpacity(isPressed: Bool) -> Double {
-        if (isHovering || isPressed) && isEnabled {
-            return colorScheme == .dark ? 0.2 : 0.1
-        } else {
-            return 0.0
-        }
+        AppColors.backgroundColorOpacity(
+            isHovering: isHovering,
+            isPressed: isPressed,
+            isEnabled: isEnabled,
+            colorScheme: colorScheme
+        )
     }
 }
 

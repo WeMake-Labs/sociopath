@@ -50,7 +50,24 @@ struct AppColors {
     
     static let sidebarTextLight = Color.white.opacity(0.5)
     static let sidebarTextDark = Color.black.opacity(0.5)
-    
+
+    // MARK: - Button/Menu Styling Utilities
+
+    /// Calculates background color opacity for button/menu hover and pressed states
+    /// - Parameters:
+    ///   - isHovering: Whether the control is being hovered
+    ///   - isPressed: Whether the control is being pressed
+    ///   - isEnabled: Whether the control is enabled
+    ///   - colorScheme: The current color scheme
+    /// - Returns: Opacity value for the background color
+    static func backgroundColorOpacity(isHovering: Bool, isPressed: Bool, isEnabled: Bool, colorScheme: ColorScheme) -> Double {
+        if (isHovering || isPressed) && isEnabled {
+            return colorScheme == .dark ? 0.2 : 0.1
+        } else {
+            return 0.0
+        }
+    }
+
 }
 
 extension Color {

@@ -72,11 +72,12 @@ struct NavMenuStyle: MenuStyle {
     }
 
     private var backgroundColorOpacity: Double {
-        if (isHovering || isPressed) && isEnabled {
-            return colorScheme == .dark ? 0.2 : 0.1
-        } else {
-            return 0.0
-        }
+        AppColors.backgroundColorOpacity(
+            isHovering: isHovering,
+            isPressed: isPressed,
+            isEnabled: isEnabled,
+            colorScheme: colorScheme
+        )
     }
 }
 
