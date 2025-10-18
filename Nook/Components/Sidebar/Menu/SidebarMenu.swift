@@ -39,7 +39,7 @@ struct SidebarMenu: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-            if browserManager.settingsManager.sidebarPosition == .left{
+            if browserManager.settingsManager.sidebarPosition == .left {
                 tabs
             }
             VStack {
@@ -51,7 +51,7 @@ struct SidebarMenu: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            if browserManager.settingsManager.sidebarPosition == .right{
+            if browserManager.settingsManager.sidebarPosition == .right {
                 tabs
             }
         }
