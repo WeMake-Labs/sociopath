@@ -338,15 +338,42 @@ func parseArcSidebarData(from fileURL: URL) throws -> ArcImportResult {
         var unpinnedContainerID: String?
         
         if let containerIDs = spaceInfo.containerIDs {
+            // Expected format: ["pinned", "<id>", "unpinned", "<id>"] - alternating labels and container IDs
+            // Must have even number of elements for valid parsing
+            guard containerIDs.count % 2 == 0 else {
+                #if DEBUG
+                print("Warning: containerIDs for space '\(spaceInfo.title)' has odd count (\(containerIDs.count)), skipping malformed container parsing")
+                #endif
+                break
+            }
+
+            // Constants for magic strings to avoid typos and improve maintainability
+            let pinnedLabel = "pinned"
+            let unpinnedLabel = "unpinned"
+
             var i = 0
             while i < containerIDs.count {
-                if i + 1 < containerIDs.count {
-                    if containerIDs[i] == "pinned" {
-                        pinnedContainerID = containerIDs[i + 1]
-                    } else if containerIDs[i] == "unpinned" {
-                        unpinnedContainerID = containerIDs[i + 1]
-                    }
+                // Defensive check before accessing i+1
+                guard i + 1 < containerIDs.count else {
+                    #if DEBUG
+                    print("Warning: containerIDs array ended unexpectedly at index \(i) for space '\(spaceInfo.title)'")
+                    #endif
+                    break
                 }
+
+                let label = containerIDs[i]
+                let containerID = containerIDs[i + 1]
+
+                if label == pinnedLabel {
+                    pinnedContainerID = containerID
+                } else if label == unpinnedLabel {
+                    unpinnedContainerID = containerID
+                } else {
+                    #if DEBUG
+                    print("Warning: Unexpected container label '\(label)' at index \(i) for space '\(spaceInfo.title)', expected '\(pinnedLabel)' or '\(unpinnedLabel)'")
+                    #endif
+                }
+
                 i += 2
             }
         }
@@ -384,6 +411,13 @@ func parseArcSidebarData(from fileURL: URL) throws -> ArcImportResult {
                     pinnedTabs.append(tab)
                 } else if let unpinnedContainerID = unpinnedContainerID,
                           item.parentID == unpinnedContainerID {
+                    unpinnedTabs.append(tab)
+                } else if item.parentID != nil {
+                    // Tab has a parentID but it doesn't match expected pinned/unpinned containers
+                    // Treat as unpinned tab to avoid data loss
+                    #if DEBUG
+                    print("Warning: Tab '\(title)' with parentID '\(item.parentID ?? "")' doesn't match expected containers, treating as unpinned")
+                    #endif
                     unpinnedTabs.append(tab)
                 }
                 
