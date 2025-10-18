@@ -11,15 +11,6 @@
       }
     },
     {
-      "identity" : "garnish",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Aeastr/Garnish",
-      "state" : {
-        "revision" : "4c49a3f163473fcb1a90f6730999cbd2e3931a18",
-        "version" : "0.0.4"
-      }
-    },
-    {
       "identity" : "sparkle",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",

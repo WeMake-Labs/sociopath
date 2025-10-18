@@ -129,7 +129,6 @@ struct NavButtonsView: View {
                         .labelStyle(.iconOnly)
                         .buttonStyle(NavButtonStyle())
                         .foregroundStyle(Color.primary)
-                        .foregroundStyle(Color.primary)
                 }
                 
                 if !sidebarOnLeft {

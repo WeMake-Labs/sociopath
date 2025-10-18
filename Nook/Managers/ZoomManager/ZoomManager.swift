@@ -32,7 +32,8 @@ class ZoomManager: ObservableObject {
     /// Get zoom level for a specific domain
     func getZoomLevel(for domain: String) -> Double {
         let key = zoomKeyPrefix + domain
-        return userDefaults.double(forKey: key)
+        let value = userDefaults.double(forKey: key)
+        return value > 0 ? value : 1.0
     }
 
     /// Save zoom level for a specific domain

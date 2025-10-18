@@ -23,17 +23,30 @@ struct ChatMessage: Identifiable, Equatable {
 }
 
 struct URLCitation: Identifiable, Equatable, Codable {
-    let id = UUID()
+    let id: UUID
     let url: String
     let title: String?
     let content: String?
     let startIndex: Int
     let endIndex: Int
-    
+
+    init(id: UUID = UUID(), url: String, title: String?, content: String?, startIndex: Int, endIndex: Int) {
+        self.id = id
+        self.url = url
+        self.title = title
+        self.content = content
+        self.startIndex = startIndex
+        self.endIndex = endIndex
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, url, title, content, startIndex, endIndex
+    }
+
     var displayTitle: String {
         title ?? url
     }
-    
+
     var domain: String {
         if let urlObj = URL(string: url),
            let host = urlObj.host {

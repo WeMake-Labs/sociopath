@@ -71,7 +71,7 @@ struct CommandPaletteView: View {
                                         ? "globe" : "magnifyingglass"
                                 )
                                 .id(isLikelyURL(text) ? "globe" : "magnifyingglass")
-                                .transition(.blur(intensity: 2, scale: 0.6).animation(.smooth(duration: 0.3)))
+                                .transition(.blur(intensity: 2, scale: 0.6))
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(isDark ? .white : .black)
                                 .frame(width: 15)

@@ -2746,7 +2746,8 @@ extension BrowserManager {
         zoomPopupHideTimer?.invalidate()
 
         // Schedule new hide timer
-        zoomPopupHideTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { _ in
+        zoomPopupHideTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 self.shouldShowZoomPopup = false
                 self.zoomPopupHideTimer = nil
@@ -2772,7 +2773,8 @@ extension BrowserManager {
         zoomPopupHideTimer?.invalidate()
 
         // Schedule new hide timer
-        zoomPopupHideTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { _ in
+        zoomPopupHideTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 self.shouldShowZoomPopup = false
                 self.zoomPopupHideTimer = nil
@@ -2798,7 +2800,8 @@ extension BrowserManager {
         zoomPopupHideTimer?.invalidate()
 
         // Schedule new hide timer
-        zoomPopupHideTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { _ in
+        zoomPopupHideTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 self.shouldShowZoomPopup = false
                 self.zoomPopupHideTimer = nil

@@ -59,7 +59,10 @@ final class MediaControlsManager {
     /// Check if a URL is from a supported media host
     private func isMediaHostURL(_ url: URL) -> Bool {
         guard let host = url.host?.lowercased() else { return false }
-        return mediaHosts.contains(where: { host.contains($0) })
+        let normalizedHost = host.lowercased()
+        return mediaHosts.contains { pattern in
+            normalizedHost == pattern || normalizedHost.hasSuffix("." + pattern)
+        }
     }
 
     private func resolveWebViews(for tab: Tab) -> [WKWebView] {

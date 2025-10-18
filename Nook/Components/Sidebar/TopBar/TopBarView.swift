@@ -12,6 +12,7 @@ struct TopBarView: View {
     @EnvironmentObject var windowState: BrowserWindowState
     @StateObject private var tabWrapper = ObservableTabWrapper()
     @State private var isHovering: Bool = false
+    @State private var isHoveringZoom: Bool = false
     @State private var showZoomPopup: Bool = false
     
     var body: some View {
@@ -134,7 +135,7 @@ struct TopBarView: View {
                         .buttonStyle(PlainButtonStyle())
                         .onHover { hovering in
                             withAnimation(.easeInOut(duration: 0.15)) {
-                                isHovering = hovering
+                                isHoveringZoom = hovering
                             }
                         }
                     }

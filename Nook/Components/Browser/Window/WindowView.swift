@@ -230,12 +230,11 @@ struct WindowView: View {
             if windowState.isSidebarVisible {
                 // Position to span 14pts into sidebar and 2pts into web content (moved 6pts left)
                 SidebarResizeView()
-                
+
                     .frame(maxHeight: .infinity)
                     .environmentObject(browserManager)
                     .environmentObject(windowState)
                     .zIndex(2000)  // Higher z-index to ensure it's above all other elements
-                    .environmentObject(windowState)
             }
         }
             .environmentObject(browserManager)
