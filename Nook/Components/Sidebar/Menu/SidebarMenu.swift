@@ -59,7 +59,7 @@ struct SidebarMenu: View {
         .ignoresSafeArea()
     }
     
-    var tabs: some View{
+    var tabs: some View {
         VStack {
             HStack {
                 MacButtonsView()
