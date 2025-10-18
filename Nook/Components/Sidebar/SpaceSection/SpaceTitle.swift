@@ -14,6 +14,8 @@ struct SpaceTitle: View {
     @FocusState private var nameFieldFocused: Bool
     @FocusState private var emojiFieldFocused: Bool
     @State private var isEllipsisHovering: Bool = false
+    @State private var isDropHovering: Bool = false
+    @State private var dropDraggedItem: UUID?
     
     @StateObject private var emojiManager = EmojiPickerManager()
 
@@ -41,7 +43,6 @@ struct SpaceTitle: View {
                         .font(.system(size: iconSize))
                         .background(EmojiPickerAnchor(manager: emojiManager))
                         .onChange(of: emojiManager.selectedEmoji) { _, newValue in
-                            print(newValue)
                             space.icon = newValue
                             browserManager.tabManager.persistSnapshot()
                          }
@@ -135,6 +136,40 @@ struct SpaceTitle: View {
             .buttonStyle(PlainButtonStyle())
         }
         // Match tabs' internal left/right padding so text aligns
+        .overlay {
+            if browserManager.tabManager.spacePinnedTabs(for: space.id).isEmpty {
+                Color.clear
+                    .contentShape(RoundedRectangle(cornerRadius: 12))
+                    .onDrop(
+                        of: [.text],
+                        delegate: SidebarSectionDropDelegateSimple(
+                            itemsCount: {
+                                browserManager.tabManager.spacePinnedTabs(for: space.id).count
+                            },
+                            draggedItem: $dropDraggedItem,
+                            targetSection: .spacePinned(space.id),
+                            tabManager: browserManager.tabManager,
+                            targetIndex: nil,
+                            onDropEntered: {
+                                withAnimation(.easeInOut(duration: 0.15)) {
+                                    NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
+                                    isDropHovering = true
+                                }
+                            },
+                            onDropCompleted: {
+                                withAnimation(.easeInOut(duration: 0.15)) {
+                                    isDropHovering = false
+                                }
+                            },
+                            onDropExited: {
+                                withAnimation(.easeInOut(duration: 0.15)) {
+                                    isDropHovering = false
+                                }
+                            }
+                        )
+                    )
+            }
+        }
         .padding(.horizontal, 10)
         .frame(height: 40)
         .frame(maxWidth: .infinity)
@@ -155,8 +190,7 @@ struct SpaceTitle: View {
         // Provide a right-click context menu mirroring the hover menu
         .contextMenu {
             Button {
-                emojiFieldFocused = true
-                NSApp.orderFrontCharacterPalette(nil)
+                emojiManager.toggle()
             } label: {
                 Label("Change Space Icon", systemImage: "face.smiling")
             }
@@ -195,7 +229,7 @@ struct SpaceTitle: View {
     //MARK: - Colors
     
     private var hoverColor: Color {
-        if isHovering {
+        if isHovering || isDropHovering {
             return colorScheme == .dark ? AppColors.spaceTabHoverLight : AppColors.spaceTabHoverDark
         } else {
             return .clear
@@ -225,10 +259,14 @@ struct SpaceTitle: View {
     private func commitRename() {
         let newName = draftName.trimmingCharacters(in: .whitespacesAndNewlines)
         if !newName.isEmpty, newName != space.name {
-            browserManager.tabManager.renameSpace(
-                spaceId: space.id,
-                newName: newName
-            )
+            do {
+                try browserManager.tabManager.renameSpace(
+                    spaceId: space.id,
+                    newName: newName
+                )
+            } catch {
+                print("⚠️ Failed to rename space \(space.id.uuidString):", error)
+            }
         }
         isRenaming = false
         nameFieldFocused = false

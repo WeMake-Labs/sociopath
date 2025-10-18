@@ -100,8 +100,8 @@ class MacButtonsViewModel {
 
     func getButtonImage(buttonType: ButtonType) -> String {
         switch buttonType {
-        case .close: "minus"
-        case .minimize: "xmark"
+        case .close: "xmark"
+        case .minimize: "minus"
         case .fullscreen: "square.split.diagonal.fill"
         }
     }
